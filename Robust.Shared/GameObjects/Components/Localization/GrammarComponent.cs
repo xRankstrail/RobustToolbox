@@ -27,6 +27,14 @@ public sealed partial class GrammarComponent : Component
     }
 
     [ViewVariables]
+    public Number? Number
+    {
+        get => Attributes.TryGetValue("number", out var g) ? Enum.Parse<Number>(g, true) : null;
+        [Obsolete("Use GrammarSystem.SetNumber instead")]
+        set => IoCManager.Resolve<IEntityManager>().System<GrammarSystem>().SetNumber((Owner, this), value);
+    }
+
+    [ViewVariables]
     public bool? ProperNoun
     {
         get => Attributes.TryGetValue("proper", out var g) ? bool.Parse(g) : null;

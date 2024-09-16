@@ -32,6 +32,11 @@ public sealed class GrammarSystem : EntitySystem
         Set(grammar, "gender", gender?.ToString());
     }
 
+    public void SetNumber(Entity<GrammarComponent> grammar, Number? number)
+    {
+        Set(grammar, "number", number?.ToString());
+    }
+
     public void SetProperNoun(Entity<GrammarComponent> grammar, bool? proper)
     {
         Set(grammar, "proper", proper?.ToString());

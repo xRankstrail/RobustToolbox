@@ -1,8 +1,23 @@
 ﻿# Used internally by the THE() function.
-zzzz-the = { PROPER($ent) ->
-    *[false] el { $ent }
-     [true] { $ent }
+# Used internally by the THE() function.
+zzzz-the = { GENDER($ent) ->
+    *[neuter] { NUMBER($ent) ->
+        *[singular] el { $ent }
+         [plural] los { $ent }
     }
+     [male] { NUMBER($ent) ->
+        *[singular] el { $ent }
+         [plural] los { $ent }
+    }
+     [female] { NUMBER($ent) ->
+        *[singular] la { $ent }
+         [plural] las { $ent }
+    }
+     [epicene] { NUMBER($ent) ->
+        *[singular] le { $ent }
+         [plural] les { $ent }
+    }
+}
 
 # Used internally by the SUBJECT() function.
 zzzz-subject-pronoun = { GENDER($ent) ->
@@ -10,6 +25,14 @@ zzzz-subject-pronoun = { GENDER($ent) ->
     [female] ella
     [epicene] elle
    *[neuter] ello
+   }
+
+# Used internally by the GENDER-INDEFINITE() function.
+zzzz-gender-indefinite = { GENDER($ent) ->
+    [male] un
+    [female] una
+    [epicene] une
+   *[neuter] un
    }
 
 # Used internally by the OBJECT() function.

@@ -20,12 +20,14 @@ namespace Robust.Shared.Localization
         {
             // Grammatical gender / pronouns
             AddCtxFunction(bundle, "GENDER", FuncGender);
+            AddCtxFunction(bundle, "NUMBER", FuncNumber);
             AddCtxFunction(bundle, "SUBJECT", FuncSubject);
             AddCtxFunction(bundle, "OBJECT", FuncObject);
             AddCtxFunction(bundle, "POSS-ADJ", FuncPossAdj);
             AddCtxFunction(bundle, "POSS-PRONOUN", FuncPossPronoun);
             AddCtxFunction(bundle, "REFLEXIVE", FuncReflexive);
             AddCtxFunction(bundle, "COUNTER", FuncCounter);
+            AddCtxFunction(bundle, "GENDER-INDEFINITE", FuncGenderIndefinite);
 
             // Conjugation
             AddCtxFunction(bundle, "CONJUGATE-BE", FuncConjugateBe);
@@ -185,6 +187,40 @@ namespace Robust.Shared.Localization
             }
 
             return new LocValueString(nameof(Gender.Neuter));
+        }
+
+        /// <summary>
+        /// Returns the number of the entity passed in; either Singular or Plural.
+        /// </summary>
+        private ILocValue FuncNumber(LocArgs args)
+        {
+            if (args.Args.Count < 1) return new LocValueString(nameof(Number.Singular));
+
+            ILocValue entity0 = args.Args[0];
+            if (entity0.Value != null)
+            {
+                EntityUid entity = (EntityUid)entity0.Value;
+
+                if (_entMan.TryGetComponent(entity, out GrammarComponent? grammar) && grammar.Number.HasValue)
+                {
+                    return new LocValueString(grammar.Number.Value.ToString().ToLowerInvariant());
+                }
+
+                if (TryGetEntityLocAttrib(entity, "number", out var number))
+                {
+                    return new LocValueString(number);
+                }
+            }
+
+            return new LocValueString(nameof(Number.Singular));
+        }
+
+        /// <summary>
+        /// Returns the respective indefinite pronoun (he, she, they, it) for the entity's gender.
+        /// </summary>
+        private ILocValue FuncGenderIndefinite(LocArgs args)
+        {
+            return new LocValueString(GetString("zzzz-gender-indefinite", ("ent", args.Args[0])));
         }
 
         /// <summary>
